@@ -7,6 +7,8 @@ const userRoutes = require("./Routes/user.routes");
 const userOrdersRoute = require("./Routes/orders.routes");
 const issuesRoute = require("./Routes/issues.routes");
 const addressRoute = require("./Routes/address.routes");
+const adminRoute = require("./Routes/admin.routes")
+const commonRoutes = require("./Routes/common.routes");
 app.use(express.json())
 app.use(cors({
     origin: [process.env.FRONTEND],
@@ -16,14 +18,12 @@ app.use(cors({
 }));
 dotenv.config();
 dbConnection();
-
-
 app.post("/api/user", userRoutes);
 app.post("/api/user/myOrders", userOrdersRoute);
 app.post("/api/user/issues", issuesRoute);
 app.post("/api/user/address", addressRoute);
-
-
+app.post("/api/admin", adminRoute);
+app.post("/api", commonRoutes);
 app.get("/", (req, res) => {
     res.send(`<h2>Hello </h2>`);
 })
