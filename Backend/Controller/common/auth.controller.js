@@ -8,21 +8,21 @@ const { loginService } = require("../../Services/Common/auth.services");
 
 const loginController = async (req, res) => {
     const { email, password } = req.body;
-    const Email = String(email);
-    const Password = String(password);
-    const myObj = {};
-    myObj.email = Email;
-    myObj.password = Password;
     try {
+        if (typeof email !== String) { throw new Error("Invalid Datatype") }
+        if (typeof password !== String) { throw new Error("Invalid Datatype") }
+        const myObj = {};
+        myObj.email = email;
+        myObj.password = password;
         const response = await loginService(myObj);
         if (!response.status) {
-            return res.status(401).json({
+            return res.status(401).json(
                 response
-            })
+            )
         }
-        return res.status(200).json({
+        return res.status(200).json(
             response
-        })
+        )
     } catch (error) {
         return res.status(401).json({
             message: error.message,
@@ -31,25 +31,15 @@ const loginController = async (req, res) => {
     }
 };
 const registerController = async (req, res) => {
-    const obj = req.body;
-    const myObj = {};
-    myObj.email = Email;
-    myObj.password = Password;
+    const { name, email, phoneNumber, password } = req.body;
+    const nameStr = String(name);
+    const nameStr = String(name);
+    const nameStr = String(name);
+    const nameStr = String(name);
     try {
-        const response = await loginService(myObj);
-        if (!response.status) {
-            return res.status(401).json({
-                response
-            })
-        }
-        return res.status(200).json({
-            response
-        })
+
     } catch (error) {
-        return res.status(401).json({
-            message: error.message,
-            status: false
-        })
+
     }
 };
-module.exports = { loginController }
+module.exports = { loginController, registerController }
