@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const { userInfo } = require("/Projects/LetsHavBiriyani-website/Backend/Models/user");
 const { loginService } = require("../../Services/Common/auth.services");
+const asyncHandler = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AsyncHanlder")
+const AppError = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AppError");
 /**
  * @param {import("express").Request} req
  * @param {import("express").Response} res
@@ -9,8 +11,8 @@ const { loginService } = require("../../Services/Common/auth.services");
 const loginController = async (req, res) => {
     const { email, password } = req.body;
     try {
-        if (typeof email !== String) { throw new Error("Invalid Datatype") }
-        if (typeof password !== String) { throw new Error("Invalid Datatype") }
+        if (typeof email !== "string") { throw new Error("Invalid Datatype") }
+        if (typeof password !== "string") { throw new Error("Invalid Datatype") }
         const myObj = {};
         myObj.email = email;
         myObj.password = password;
@@ -30,16 +32,25 @@ const loginController = async (req, res) => {
         })
     }
 };
-const registerController = async (req, res) => {
+const registerController = asyncHandler(async (req, res) => {
     const { name, email, phoneNumber, password } = req.body;
-    const nameStr = String(name);
-    const nameStr = String(name);
-    const nameStr = String(name);
-    const nameStr = String(name);
-    try {
-
-    } catch (error) {
-
+    if (typeof name !== "string" || typeof email !== "string" || typeof password !== "string" || typeof phoneNumber !== "string" || phoneNumber == undefined || email == undefined || name == undefined || password == undefined) {
+        throw new AppError(400, "Invalid Entry");
+    };
+    const isUser = await userInfo.findOne({ email: email });
+    if (isUser) {
+        throw new AppError(400, "User already exists!")
     }
-};
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await userInfo.create({
+        name: name,
+        email: email,
+        phoneNumber: phoneNumber,
+        password: hashedPassword
+    });
+    return res.status(201).json({
+        message: "User registered successfully!",
+        status: true
+    })
+});
 module.exports = { loginController, registerController }

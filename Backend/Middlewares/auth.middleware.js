@@ -2,7 +2,6 @@ const express = require("express");
 const { verifyToken } = require("../Utils/jwt");
 
 
-
 async function authMiddleware(req, res, next) {
     const token = req.cookies.token;
     try {
