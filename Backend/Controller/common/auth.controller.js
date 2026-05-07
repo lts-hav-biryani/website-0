@@ -3,6 +3,7 @@ const { userInfo } = require("/Projects/LetsHavBiriyani-website/Backend/Models/u
 const { loginService } = require("../../Services/Common/auth.services");
 const asyncHandler = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AsyncHanlder")
 const AppError = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AppError");
+const { assignToken } = require("../../Utils/jwt");
 /**
  * @param {import("express").Request} req
  * @param {import("express").Response} res
@@ -22,7 +23,8 @@ const loginController = async (req, res) => {
                 response
             )
         }
-        return res.status(200).json(
+        const token = await assignToken({ email: email });
+        return res.status(200).cookie("token", token).json(
             response
         )
     } catch (error) {

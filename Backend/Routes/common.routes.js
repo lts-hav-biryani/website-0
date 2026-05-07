@@ -6,6 +6,6 @@ routes.post("/logout", authMiddleware, logoutController);
 routes.post("/changePassword", authMiddleware, changePasswordController);
 routes.post("/forgotPassword", forgotPasswordController);
 routes.post("/login", loginController);
-routes.post("/dashboard", dashboardController);
+routes.post("/dashboard", authMiddleware, dashboardController);
 routes.post("/register", registerController);
 module.exports = routes;

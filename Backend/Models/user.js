@@ -84,5 +84,6 @@ const reviewsSchema = new mongoose.Schema({
         type: Array
     }
 });
+
 const userReviews = mongoose.model("userReviews", reviewsSchema);
 module.exports = { userInfo, userIssues, userAddresses, userReviews, userOrders };
