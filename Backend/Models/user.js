@@ -84,6 +84,19 @@ const reviewsSchema = new mongoose.Schema({
         type: Array
     }
 });
-
+const otpSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true
+    },
+    otp: {
+        type: String
+    },
+    expiresAt: {
+        type: Date,
+        expires : 0
+    }
+})
 const userReviews = mongoose.model("userReviews", reviewsSchema);
-module.exports = { userInfo, userIssues, userAddresses, userReviews, userOrders };
+const otp = mongoose.model("otp", otpSchema)
+module.exports = { userInfo, userIssues, userAddresses, userReviews, userOrders, otp };

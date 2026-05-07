@@ -3,7 +3,10 @@ const { userInfo } = require("/Projects/LetsHavBiriyani-website/Backend/Models/u
 const { loginService } = require("../../Services/Common/auth.services");
 const asyncHandler = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AsyncHanlder")
 const AppError = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AppError");
+const nodemailer = require("nodemailer");
+const transporter = require("/Projects/LetsHavBiriyani-website/Backend/Utils/otp")
 const { assignToken } = require("../../Utils/jwt");
+const { otp } = require("../../Models/user");
 /**
  * @param {import("express").Request} req
  * @param {import("express").Response} res
@@ -55,4 +58,26 @@ const registerController = asyncHandler(async (req, res) => {
         status: true
     })
 });
-module.exports = { loginController, registerController }
+const sendOtpController = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000);
+    const hashedOtp = await bcrypt.hash(generatedOtp, 10);
+    const otpTrans = await transporter.sendMail({
+        from: process.env.EMAIL,
+        to: email,
+        subject: "Otp from LtsHavBiryani for Password Reset",
+        text: `Your otp is ${generatedOtp}`
+    });
+    const user = await otp.create({ email: email, otp: hashedOtp, expiresAt: Date.now() + 10 * 60 * 1000 });
+});
+const verifyOtpController = asyncHandler(async (req, res) => {
+    const { email, userOtp } = req.body;
+    const user = await otp.findOne({ email: email });
+    const isMatch = await bcrypt.compare(userOtp, user.otp);
+    if (!isMatch) {
+        throw new AppError(400, "Invalid Otp, try again!");
+    }
+    const {newPassword} = req.body;
+
+});
+module.exports = { loginController, sendOtpController, verifyOtpController }
