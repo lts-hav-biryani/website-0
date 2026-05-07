@@ -2,9 +2,7 @@ const { userReviews } = require("../../Models/user");
 const { userInfo, userAddresses, userOrders, userOrders, userOrders, userIssues } = require("/Projects/LetsHavBiriyani-website/Backend/Models/user");
 const AppError = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AppError");
 
-const addressService = async (email) => {
-    const user = await userInfo.findOne({ email: email });
-    const _id = user._id;
+const addressService = async (_id) => {
     const address = await userAddresses.findOne({ userId: _id });
     if (!address) {
         throw new AppError(400, "No saved address found!")
@@ -12,9 +10,7 @@ const addressService = async (email) => {
     const addressArray = address.addresses;
     return addressArray;
 };
-const ordersService = async (email) => {
-    const user = await userInfo.findOne({ email: email });
-    const _id = user._id;
+const ordersService = async (_id) => {
     const orders = await userOrders.findOne({ userId: _id });
     if (!orders) {
         throw new AppError(400, "No orders yet!");
@@ -26,9 +22,7 @@ const ordersService = async (email) => {
     };
     return orderObj;
 };
-const issuesService = async (email) => {
-    const user = await userInfo.findOne({ email: email });
-    const _id = user._id;
+const issuesService = async (_id) => {
     const issues = await userIssues.findOne({ userId: _id });
     if (!issues) {
         throw new AppError(400, "No issues!");
@@ -40,9 +34,7 @@ const issuesService = async (email) => {
     };
     return issuesObj;
 };
-const reviewService = async (email) => {
-    const user = await userInfo.findOne({ email: email });
-    const _id = user._id;
+const reviewService = async (_id) => {
     const reviewsUser = await userReviews.findOne({ userId: _id });
     if (!reviewsUser) {
         throw new AppError(400, "No reviews!");
