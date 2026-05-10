@@ -11,6 +11,9 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
             throw new AppError(400, "Invalid token or expired token");
         }
         const decoded = await verifyToken(token);
+        if (!decoded) {
+            throw new AppError(403, "Invalid Token or expired token!")
+        }
         const email = decoded.email;
         const user = await userInfo.findOne({ email: email });
         req.userProfile = user;
