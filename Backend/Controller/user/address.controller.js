@@ -37,7 +37,14 @@ const saveAddress = asyncHandler(async (req, res) => {
     })
 });
 const deleteAddress = asyncHandler(async (req, res) => {
-    const {id} = req.body;
-    
+    const { id } = req.body;
+    const addressRecord = await userAddresses.findByIdAndDelete(id);
+    if (!addressRecord) {
+        throw new AppError(400, "Address does not exists!");
+    }
+    return res.status(200).json({
+        message: "Address deleted!",
+        status: true
+    });
 })
-module.exports = { getSavedAddressController, saveAddress };
+module.exports = { getSavedAddressController, saveAddress, deleteAddress };
