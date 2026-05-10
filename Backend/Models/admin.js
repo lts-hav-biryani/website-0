@@ -1,17 +1,17 @@
 const mongoose = require("mongoose")
 const menuSchema = new mongoose.Schema({
-    orderImageLink: {
+    itemImageLink: {
         type: String,
         required: false
-    }, orderTitle: {
+    }, itemTitle: {
         type: String,
         required: true
     },
-    orderDescription: {
+    itemDescription: {
         type: String,
         required: false
     },
-    orderPrice: {
+    itemPrice: {
         type: Number,
         required: true
     },

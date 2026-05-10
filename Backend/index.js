@@ -3,7 +3,7 @@ const app = express();
 const dotenv = require("dotenv");
 const cors = require("cors");
 const dbConnection = require("./Config/db");
-const userRoutes = require("./Routes/user.routes");
+const menuCardRoute = require("./Routes/menuCardRoute");
 const userOrdersRoute = require("./Routes/orders.routes");
 const issuesRoute = require("./Routes/issues.routes");
 const addressRoute = require("./Routes/address.routes");
@@ -20,7 +20,7 @@ app.use(cors({
     methods: ["GET", "POST"]
 }));
 dbConnection();
-app.use("/api/user", authMiddleware, userRoutes);
+app.use("/api/public", menuCardRoute);
 app.use("/api/user/myOrders", authMiddleware, userOrdersRoute);
 app.use("/api/user/address", authMiddleware, addressRoute); //done
 app.use("/api/admin", authMiddleware, adminMiddleware, adminRoute);

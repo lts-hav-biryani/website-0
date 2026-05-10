@@ -33,33 +33,35 @@ const addressSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    address: {
-        receiverName: {
-            type: String,
-            required: true
-        },
-        receiverNumber: {
-            type: String,
-            required: true
-        },
-        streetName: {
-            type: String,
-        },
-        cordinates: {
-            lat: String,
-            long: String
-        },
-        city: {
-            type: String,
-        },
-        state: {
-            type: String,
-            default: "Karnataka"
-        },
-        pincode: {
-            type: String,
+    address: [
+        {
+            receiverName: {
+                type: String,
+                required: true
+            },
+            receiverNumber: {
+                type: String,
+                required: true
+            },
+            streetName: {
+                type: String,
+            },
+            cordinates: {
+                lat: String,
+                long: String
+            },
+            city: {
+                type: String,
+            },
+            state: {
+                type: String,
+                default: "Karnataka"
+            },
+            pincode: {
+                type: String,
+            }
         }
-    }
+    ]
 });
 const userAddresses = mongoose.model("userAddresses", addressSchema);
 const orderSchema = new mongoose.Schema({
@@ -68,15 +70,13 @@ const orderSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    completedOrders: {
-        type: Array
-    },
-    pendingOrders: {
-        type: Array
-    },
-    failedOrders: {
-        type: Array
-    }
+    orders: [
+        {
+            orderId: { type: String, unique: true }, orderTitle: String, orderPrice: String, orderStatus: { type: String }, paymentMode: String, paymentDone: { type: Boolean, default: false }, createdAt: {
+                type: Date, default: Date.now
+            }
+        }
+    ]
 });
 const userOrders = mongoose.model("userOrders", orderSchema);
 const reviewsSchema = new mongoose.Schema({
