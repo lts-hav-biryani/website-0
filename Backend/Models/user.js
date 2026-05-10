@@ -79,24 +79,6 @@ const orderSchema = new mongoose.Schema({
     }
 });
 const userOrders = mongoose.model("userOrders", orderSchema);
-const issuesSchema = new mongoose.Schema({
-    userId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    openIssues: {
-        type: Array,
-    },
-    // {issueId:OrderId+1, IssueDescription:"something went wrong", if given issue exists in open issue then give "Kindly wait till the old issue is solved" else Add to open issue)
-    closedIssues: {
-        type: Array
-    },
-    pendingIssues: {
-        type: Array
-    }
-});
-const userIssues = mongoose.model("userIssues", issuesSchema);
 const reviewsSchema = new mongoose.Schema({
     userId: {
         type: String,
@@ -126,4 +108,4 @@ const otpSchema = new mongoose.Schema({
 })
 const userReviews = mongoose.model("userReviews", reviewsSchema);
 const otp = mongoose.model("otp", otpSchema)
-module.exports = { userInfo, userIssues, userAddresses, userReviews, userOrders, otp };
+module.exports = { userInfo, userAddresses, userReviews, userOrders, otp };
