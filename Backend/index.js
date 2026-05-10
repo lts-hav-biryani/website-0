@@ -9,6 +9,8 @@ const issuesRoute = require("./Routes/issues.routes");
 const addressRoute = require("./Routes/address.routes");
 const adminRoute = require("./Routes/admin.routes")
 const commonRoutes = require("./Routes/common.routes");
+const { authMiddleware } = require("./Middlewares/auth.middleware");
+const adminMiddleware = require("./Middlewares/admin.middleware");
 app.use(express.json())
 dotenv.config();
 app.use(cors({
@@ -18,11 +20,11 @@ app.use(cors({
     methods: ["GET", "POST"]
 }));
 dbConnection();
-app.use("/api/user", userRoutes);
-app.use("/api/user/myOrders", userOrdersRoute);
-app.use("/api/user/issues", issuesRoute);
-app.use("/api/user/address", addressRoute);
-app.use("/api/admin", adminRoute);
+app.use("/api/user", authMiddleware, userRoutes);
+app.use("/api/user/myOrders", authMiddleware, userOrdersRoute);
+app.use("/api/user/issues", authMiddleware, issuesRoute);
+app.use("/api/user/address", authMiddleware, addressRoute);
+app.use("/api/admin", authMiddleware, adminMiddleware, adminRoute);
 app.use("/api", commonRoutes);
 app.use("/", (req, res) => {
     res.send(`<h2>Hello </h2>`);

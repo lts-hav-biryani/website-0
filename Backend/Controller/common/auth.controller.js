@@ -7,10 +7,6 @@ const nodemailer = require("nodemailer");
 const transporter = require("/Projects/LetsHavBiriyani-website/Backend/Utils/otp")
 const { assignToken } = require("../../Utils/jwt");
 const { otp } = require("../../Models/user");
-/**
- * @param {import("express").Request} req
- * @param {import("express").Response} res
- */
 
 const loginController = async (req, res) => {
     const { email, password } = req.body;
@@ -69,15 +65,47 @@ const sendOtpController = asyncHandler(async (req, res) => {
         text: `Your otp is ${generatedOtp}`
     });
     const user = await otp.create({ email: email, otp: hashedOtp, expiresAt: Date.now() + 10 * 60 * 1000 });
+    return res.status(200).json({
+        message: `Otp valid for 10mins has been sent to : ${email}`,
+        status: true
+    });
 });
-const verifyOtpController = asyncHandler(async (req, res) => {
-    const { email, userOtp } = req.body;
-    const user = await otp.findOne({ email: email });
-    const isMatch = await bcrypt.compare(userOtp, user.otp);
-    if (!isMatch) {
-        throw new AppError(400, "Invalid Otp, try again!");
+const forgotPasswordController = asyncHandler(async (req, res) => {
+    const { password } = req.body;
+    const email = req.userEmail;
+    const otpExist = await otp.findOne({ email: email });
+    if (!otpExist.verified) {
+        throw new AppError(403, "Please verify your otp!");
     }
-    const {newPassword} = req.body;
-
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userProfile = await userInfo.findOneAndUpdate({ email: email }, { password: hashedPassword }, { runValidators: true });
+    return res.status(200).json({
+        message: "Password reset successful!",
+        status: true
+    });
 });
-module.exports = { loginController, sendOtpController, verifyOtpController }
+const changePasswordController = asyncHandler(async (req, res) => {
+    const user = req.userProfile;
+    const { oldPassword, newPassword } = req.body;
+    const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!passwordMatch) {
+        throw new AppError(400, "Old Password didn't match with records!");
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await userInfo.updateOne({ _id: user._id }, { password: hashedPassword })
+    return res.status(200).json({
+        message: "Password changed successfully !",
+        status: true
+    })
+});
+/**
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ */
+const logoutController = async (req, res) => {
+    res.status(400).clearCookie(token, { sameSite: true, httpOnly: true, secure: true }).json({
+        message: "Logout successful!",
+        status: true
+    });
+}
+module.exports = { logoutController, loginController, sendOtpController, forgotPasswordController, changePasswordController, registerController }

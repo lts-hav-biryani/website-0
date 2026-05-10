@@ -94,7 +94,11 @@ const otpSchema = new mongoose.Schema({
     },
     expiresAt: {
         type: Date,
-        expires : 0
+        expires: 0
+    },
+    verified: {
+        type: Boolean,
+        default: false
     }
 })
 const userReviews = mongoose.model("userReviews", reviewsSchema);

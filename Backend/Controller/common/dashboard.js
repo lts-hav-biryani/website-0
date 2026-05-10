@@ -8,4 +8,5 @@ const dashboardController = asyncHandler(async (req, res) => {
     return res.status(200).json({
         userDetails: { name: user.name, email: user.email}
     });
-})
+});
+module.exports = {dashboardController}
