@@ -32,10 +32,33 @@ const addressSchema = new mongoose.Schema({
     userId: {
         type: String,
         required: true,
-        unique: true
     },
-    addresses: {
-        type: Array
+    address: {
+        receiverName: {
+            type: String,
+            required: true
+        },
+        receiverNumber: {
+            type: String,
+            required: true
+        },
+        streetName: {
+            type: String,
+        },
+        cordinates: {
+            lat: String,
+            long: String
+        },
+        city: {
+            type: String,
+        },
+        state: {
+            type: String,
+            default: "Karnataka"
+        },
+        pincode: {
+            type: String,
+        }
     }
 });
 const userAddresses = mongoose.model("userAddresses", addressSchema);

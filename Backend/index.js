@@ -22,13 +22,9 @@ app.use(cors({
 dbConnection();
 app.use("/api/user", authMiddleware, userRoutes);
 app.use("/api/user/myOrders", authMiddleware, userOrdersRoute);
-app.use("/api/user/issues", authMiddleware, issuesRoute);
 app.use("/api/user/address", authMiddleware, addressRoute);
 app.use("/api/admin", authMiddleware, adminMiddleware, adminRoute);
 app.use("/api", commonRoutes);
-app.use("/", (req, res) => {
-    res.send(`<h2>Hello </h2>`);
-});
 app.use((err, req, res, next) => {
     console.log(err);
     return res.status(err.statusCode || 500).json({
