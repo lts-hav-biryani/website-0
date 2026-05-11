@@ -72,7 +72,9 @@ const orderSchema = new mongoose.Schema({
     },
     orders: [
         {
-            orderId: { type: String, unique: true }, orderTitle: String, orderPrice: String, orderStatus: { type: String }, paymentMode: String, paymentDone: { type: Boolean, default: false }, createdAt: {
+            orderId: { type: String, unique: true }, orderTitle: String, orderPrice: String, orderStatus: { type: String },
+            orderQuantity: {type: Number, default: 1, max: 10 }
+            , paymentMode: String, paymentDone: { type: Boolean, default: false }, createdAt: {
                 type: Date, default: Date.now
             }
         }

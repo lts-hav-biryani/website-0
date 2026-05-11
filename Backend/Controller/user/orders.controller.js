@@ -37,5 +37,10 @@ const failedOrdersController = asyncHandler(async (req, res) => {
     })
 });
 const placeOrder = asyncHandler(async (req, res) => {
+    const myObj = {
+        userId: "asijasfs",
+        orders: [{ itemId: "ASas68", itemPrice: "adas", itemTitle: "aadasd", itemPrice: "Adas", itemQuantity: "Asda", paymentMode: "UPI" }, { itemId: "ASas68", itemPrice: "adas", itemTitle: "aadasd", itemPrice: "Adas", itemQuantity: "Asda", paymentMode: "UPI" }],
+        totalBill:599
+    }
 })
 module.exports = { completedOrdersController, failedOrdersController, pendingOrdersController };

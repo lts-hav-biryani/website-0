@@ -3,7 +3,13 @@ const menuSchema = new mongoose.Schema({
     itemImageLink: {
         type: String,
         required: false
-    }, itemTitle: {
+    },
+    itemId: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    itemTitle: {
         type: String,
         required: true
     },
