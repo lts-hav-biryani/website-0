@@ -33,7 +33,7 @@ const forgotPasswordMiddleware = asyncHandler(async (req, res, next) => {
     const user = await userInfo.findOne({ email: email });
     if (!user) {
         throw new AppError(400, "User not found!")
-    }
+    }              
     const originalOtp = await otp.findOne({ email: email });
     if (!originalOtp) {
         throw new AppError(400, "Invalid Otp/Resend Otp");

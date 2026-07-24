@@ -28,86 +28,53 @@ const userDataSchema = new mongoose.Schema({
     }
 });
 const userInfo = mongoose.model("userInfo", userDataSchema);
-const addressSchema = new mongoose.Schema({
-    userId: {
-        type: String,
-        required: true,
-    },
-    address: [
-        {
-            receiverName: {
-                type: String,
-                required: true
-            },
-            receiverNumber: {
-                type: String,
-                required: true
-            },
-            streetName: {
-                type: String,
-            },
-            cordinates: {
-                lat: String,
-                long: String
-            },
-            city: {
-                type: String,
-            },
-            state: {
-                type: String,
-                default: "Karnataka"
-            },
-            pincode: {
-                type: String,
-            }
-        }
-    ]
-});
-const userAddresses = mongoose.model("userAddresses", addressSchema);
 const orderSchema = new mongoose.Schema({
-    userId: {
+    id: {
         type: String,
         required: true,
         unique: true
     },
-    orders: [
-        {
-            orderId: { type: String, unique: true }, orderTitle: String, orderPrice: String, orderStatus: { type: String },
-            orderQuantity: {type: Number, default: 1, max: 10 }
-            , paymentMode: String, paymentDone: { type: Boolean, default: false }, createdAt: {
-                type: Date, default: Date.now
-            }
-        }
-    ]
-});
-const userOrders = mongoose.model("userOrders", orderSchema);
-const reviewsSchema = new mongoose.Schema({
-    userId: {
+    name: {
         type: String,
         required: true,
-        unique: true
-    },
-    review: {
-        type: Array
     }
-});
-const otpSchema = new mongoose.Schema({
-    email: {
+    ,
+    phNo: {
         type: String,
-        required: true
+        required: true,
     },
-    otp: {
+    address: {
+        required: true,
+        type: {
+            city: String,
+            pincode: String,
+            street: String
+        }
+    },
+    itemDetails: {
+        required: true,
+        type: [{
+            itemId: String,
+            itemPrice: String,
+            itemQuantity: String
+        }]
+    },
+    finalTotal: {
+        required: true,
         type: String
     },
-    expiresAt: {
-        type: Date,
-        expires: 0
-    },
-    verified: {
+    paymentDone: {
         type: Boolean,
         default: false
+    },
+    paymentMethod: {
+        type: "ONLINE" | "OFFLINE"
+    },
+    paymentId: {
+        type: String,
+        required: true,
+        unique: true
     }
-})
-const userReviews = mongoose.model("userReviews", reviewsSchema);
-const otp = mongoose.model("otp", otpSchema)
-module.exports = { userInfo, userAddresses, userReviews, userOrders, otp };
+});
+const userOrders = mongoose.model("userOrders", orderSchema);
+module.exports = { userInfo, userOrders };
