@@ -91,7 +91,7 @@ const CartPage = () => {
         return;
       }
       setIsProcessing(true);
-      const response = await fetch(`http://localhost:8010/api/pay/razorpayCreateOrder`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/pay/razorpayCreateOrder`, {
         method: "POST",
         headers: {
           "content-type": "application/json"
@@ -114,7 +114,7 @@ const CartPage = () => {
         order_id: data.order.id,
         handler: async function (response: any) {
           console.log("Handler called")
-          const backendHit = await fetch(`http://localhost:8010/api/pay/verifyPayment`, {
+          const backendHit = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/pay/verifyPayment`, {
             method: "POST",
             headers: { "content-type": "application/json" },
             credentials: "include",
