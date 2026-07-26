@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ['172.16.11.16'],
+  allowedDevOrigins: ['172.16.11.16', '10.52.207.246'],
   images: {
     remotePatterns: [
       {
@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "tse4.mm.bing.net",
-      },       {
+      }, {
         protocol: "https",
         hostname: "chatgpt.com",
       },

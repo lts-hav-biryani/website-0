@@ -31,15 +31,4 @@ const menuSchema = new mongoose.Schema({
     }
 });
 const menu = mongoose.model("menu", menuSchema);
-const careerScehma = new mongoose.Schema({
-    jobTitle: {
-        type: String,
-        required: true
-    },
-    jobDescription: {
-        type: String,
-        required: true
-    }
-});
-const career = mongoose.model("career", careerScehma);
-module.exports = { career, menu }
+module.exports =  menu; 

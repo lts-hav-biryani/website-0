@@ -46,10 +46,10 @@ const CartPage = () => {
     updateQuantity,
     clearCart,
     applyCoupon,
-    removeCoupon,
+    removeCoupon
   } = useCart()
   const router = useRouter();
-
+  const [message, setMessage] = useState("");
   // export orderDetails
   const [address, setAddress] = useState<DeliveryAddress>(emptyAddress);
   const [couponInput, setCouponInput] = useState("");
@@ -70,69 +70,82 @@ const CartPage = () => {
     });
     if (result.success) setCouponInput("");
   };
+  orderDetails.address = address;
+  orderDetails.items = cart;
+  orderDetails.subtotal = totals.subtotal;
+  orderDetails.discount = totals.discount;
+  orderDetails.delivery = totals.delivery;
+  orderDetails.finalTotal = totals.finalTotal;
+  const orderId = generateOrderId();
+  orderDetails.id = orderId;
   const handlePlaceOrder = async () => {
-    setCheckoutError(null);
-    const validationError = validateAddress(address);
-    if (validationError) {
-      setCheckoutError(validationError);
-      return;
-    }
-    if (cart.length === 0) {
-      setCheckoutError("Your cart is empty.");
-      return;
-    }
-    setIsProcessing(true);
-    orderDetails.address = address;
-    orderDetails.items = cart;
-    orderDetails.subtotal = totals.subtotal;
-    orderDetails.discount = totals.discount;
-    orderDetails.delivery = totals.delivery;
-    orderDetails.finalTotal = totals.finalTotal;
-    const orderId = generateOrderId();
-    console.log("This is cart ", cart)
-    orderDetails.id = orderId;
-    console.log(orderDetails);
-    const amount = orderDetails.finalTotal;
-    console.log(amount);
-    orderDetails.address = address;
-    orderDetails.finalTotal = totals.finalTotal;
-    const response = await fetch(`http://localhost:8010/api/razorpayCreateOrder`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json"
-      },
-      credentials: "include",
-      body: JSON.stringify({ amount: orderDetails.finalTotal })
-    });
-    const message = await response.json();
-    const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-      amount: message.order.amount,
-      currency: "INR",
-      order_id: message.order.id,
-      handler: async function (response: any) {
-        const backendHit = await fetch(`http://localhost:8010/api/verifyPayment`, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(response)
-        })
-        const message = await backendHit.json();
-        if (backendHit.ok) {
-          alert(message.message);
-          orderDetails.paymentMethod = "ONLINE";
-          orderDetails.paymentStatus = "paid";
-          orderDetails.paymentId = response.razorpay_payment_id;
-          router.push("/OrderS");
+    try {
+      setCheckoutError(null);
+      const validationError = validateAddress(address);
+      if (validationError) {
+        setCheckoutError(validationError);
+        return;
+      }
+      if (cart.length === 0) {
+        setCheckoutError("Your cart is empty.");
+        return;
+      }
+      setIsProcessing(true);
+      const response = await fetch(`http://localhost:8010/api/pay/razorpayCreateOrder`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({ amount: orderDetails.finalTotal })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setMessage(data.message);
+        setIsProcessing(false);
+        alert(data.message)
+        return
+      }
+      console.log(data)
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: data.order.finalTotal,
+        currency: "INR",
+        order_id: data.order.id,
+        handler: async function (response: any) {
+          console.log("Handler called")
+          const backendHit = await fetch(`http://localhost:8010/api/pay/verifyPayment`, {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ response: response, orderDetails: orderDetails })
+          })
+          const data = await backendHit.json();
+          if (backendHit.ok) {
+            alert(data.message);
+            orderDetails.paymentMethod = "ONLINE";
+            orderDetails.paymentStatus = "paid";
+            orderDetails.paymentId = response.razorpay_payment_id;
+            router.push("/OrderS");
+          }
+          if (!backendHit.ok) {
+            setMessage(data.message);
+            alert(data.message)
+          }
         }
       }
+      if (response.ok) {
+        // console.log(window.Razorpay)
+        const rzp = new window.Razorpay(options);
+        rzp.open()
+      }
+      setIsProcessing(false)
+    } catch (error: any) {
+      setIsProcessing(false)
+      console.log(error)
+      setMessage(error.message);
+      return
     }
-    if (response.ok) {
-      // console.log(window.Razorpay)
-      const rzp = new window.Razorpay(options);
-      rzp.open()
-    }
-    setIsProcessing(false)
   };
   if (cart.length === 0) {
     return (
@@ -166,6 +179,7 @@ const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-[#0B1F2E] text-[#F9FAFB] px-3 md:px-10 py-6 pb-28 md:pb-6">
+      {message}
       <div className="flex items-center justify-between mb-6">
         <button
           onClick={() => router.push("/Menu")}
@@ -485,4 +499,5 @@ const CartPage = () => {
     </div>
   );
 };
+
 export default CartPage;

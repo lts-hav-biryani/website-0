@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const { userInfo } = require("/Projects/LetsHavBiriyani-website/Backend/Models/user")
 async function loginService(myObj) {
     const { email, password } = myObj;
@@ -12,7 +13,7 @@ async function loginService(myObj) {
             return response;
         }
         const hashedPassword = isUser.password;
-        const passwordMatch = await bcrypt.compare(Password, hashedPassword);
+        const passwordMatch = await bcrypt.compare(password, hashedPassword);
         if (!passwordMatch) {
             response.message = "Invalid email / password";
             response.status = false;
@@ -27,4 +28,4 @@ async function loginService(myObj) {
         return response;
     }
 };
-module.exports = {loginService}
+module.exports = { loginService }

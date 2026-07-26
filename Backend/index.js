@@ -3,29 +3,23 @@ const app = express();
 const dotenv = require("dotenv");
 const cors = require("cors");
 const dbConnection = require("./Config/db");
-const menuCardRoute = require("./Routes/menuCardRoute");
-const userOrdersRoute = require("./Routes/orders.routes");
-const addressRoute = require("./Routes/address.routes");
-const adminRoute = require("./Routes/admin.routes")
-const commonRoutes = require("./Routes/common.routes");
+const cookieParser = require("cookie-parser");
+const paymentRoutes = require("./Routes/paymentRoutes");
+const authRoutes = require("./Routes/authRoutes");
 const { authMiddleware } = require("./Middlewares/auth.middleware");
-const adminMiddleware = require("./Middlewares/admin.middleware");
-const { webhookController } = require("./Controller/admin/order.controller");
+const AppError = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AppError");
 dotenv.config();
-app.use(express.json())
+app.use(express.json());
 app.use(cors({
-    origin: process.env.FRONTEND,
+    origin: [process.env.FRONTEND || 'http://10.52.207.246'],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST"]
 }));
+app.use(cookieParser())
 dbConnection();
-app.use("/api/public", menuCardRoute);
-app.use("/api", userOrdersRoute);
-app.use("/api/user/myOrders", authMiddleware, userOrdersRoute);
-app.use("/api/user/address", authMiddleware, addressRoute); //done
-app.use("/api/admin", authMiddleware, adminMiddleware, adminRoute);
-app.use("/api", commonRoutes);
+app.use("/api/pay", authMiddleware, paymentRoutes);
+app.use("/api", authRoutes);
 app.use((err, req, res, next) => {
     console.log(err);
     return res.status(err.statusCode || 500).json({

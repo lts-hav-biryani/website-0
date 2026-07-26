@@ -24,6 +24,8 @@ type CartContextType = {
   clearCart: () => void;
   applyCoupon: (code: string) => { success: boolean; message: string };
   removeCoupon: () => void;
+  loggedIn: boolean;
+  setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -44,6 +46,7 @@ export function GlobalContext({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [appliedCoupon, setAppliedCoupon] = useState("");
   const [isHydrated, setIsHydrated] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     setCart(loadCartFromStorage());
@@ -131,11 +134,14 @@ export function GlobalContext({ children }: { children: React.ReactNode }) {
       clearCart,
       applyCoupon,
       removeCoupon,
+      loggedIn,
+      setLoggedIn
     }),
     [
       cart,
       cartCount,
       totals,
+      loggedIn,
       appliedCoupon,
       addItem,
       removeItem,
@@ -158,6 +164,5 @@ export function useCart() {
   }
   return context;
 }
-
 /** @deprecated Use useCart instead */
 export const GlobalContextProvider = CartContext;

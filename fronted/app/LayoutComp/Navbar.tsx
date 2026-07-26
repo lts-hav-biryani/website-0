@@ -4,11 +4,34 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaCartShopping } from "react-icons/fa6";
 import { useCart } from "@/app/context/GlobalContext";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const { loggedIn, setLoggedIn } = useCart();
   const router = useRouter();
   const { cartCount } = useCart();
-
+  useEffect(() => {
+    const searchForLoggedIn = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/loggedIn`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "Application/json"
+          },
+          credentials: "include"
+        });
+        if (!response.ok) {
+          setLoggedIn(false);
+        } else {
+          setLoggedIn(true);
+        }
+      } catch (error) {
+        console.log(error);
+        setLoggedIn(false);
+      }
+    }
+    searchForLoggedIn();
+  }, [loggedIn]);
   return (
     <div className="sticky top-0 z-50 bg-[#0B1F2E]/90 backdrop-blur border-b border-[#2C4A5F]">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -32,7 +55,6 @@ const Navbar = () => {
           <button onClick={() => router.push("/Menu")} className="nav-btn">
             Menu
           </button>
-
           <button
             onClick={() => router.push("/Cart")}
             className="nav-btn flex items-center gap-2 relative"
@@ -45,10 +67,8 @@ const Navbar = () => {
               </span>
             )}
           </button>
-
-          <button onClick={() => router.push("/Login")} className="btn-primary">
-            Login
-          </button>
+          {loggedIn && <button className="btn-primary" onClick={() => router.push("/Dashboard")} >Dashboard</button>}
+          {!loggedIn && <button className="btn-primary" onClick={() => router.push("/Login")} >Login</button>}
         </div>
       </div>
 

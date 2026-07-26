@@ -18,18 +18,14 @@ const userDataSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    goldMember: {
-        type: Boolean,
-        default: false
-    },
-    admin: {
-        type: Boolean,
-        default: false
-    }
 });
 const userInfo = mongoose.model("userInfo", userDataSchema);
 const orderSchema = new mongoose.Schema({
-    id: {
+    userId: {
+        type: String,
+        required: true
+    },
+    orderId: {
         type: String,
         required: true,
         unique: true
@@ -37,8 +33,7 @@ const orderSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-    }
-    ,
+    },
     phNo: {
         type: String,
         required: true,
@@ -63,17 +58,18 @@ const orderSchema = new mongoose.Schema({
         required: true,
         type: String
     },
-    paymentDone: {
-        type: Boolean,
-        default: false
-    },
-    paymentMethod: {
-        type: "ONLINE" | "OFFLINE"
-    },
     paymentId: {
         type: String,
         required: true,
         unique: true
+    },
+    orderConfirmed: {
+        type: Boolean,
+        default: false
+    },
+    orderDelivered: {
+        type: Boolean,
+        default: false
     }
 });
 const userOrders = mongoose.model("userOrders", orderSchema);

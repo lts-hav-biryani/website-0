@@ -11,7 +11,19 @@ import {
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import type { OrderSummary } from "@/lib/types";
 import { orderDetails } from "../Cart/page";
+import { useCart } from "../context/GlobalContext";
+
 const OrderSuccessPage = () => {
+  const {
+    cart,
+    totals,
+    appliedCoupon,
+    removeItem,
+    updateQuantity,
+    clearCart,
+    applyCoupon,
+    removeCoupon,
+  } = useCart();
   const router = useRouter();
   // const [order, setOrder] = useState<OrderSummary | null>(null);
   const isSuccess = orderDetails?.paymentStatus === "paid";
@@ -29,16 +41,16 @@ const OrderSuccessPage = () => {
       </div>
     );
   }
-
+  console.log(orderDetails)
   const whatsappMessage = encodeURIComponent(`
 Order Help Request
 
 Order ID: ${orderDetails.id}
 
 Items:
-${orderDetails.items.map((i) => `${i.itemTitle} x${i.itemQuantity}`).join("\n")}
+${cart.map((i) => `${i.itemTitle} x${i.itemQuantity}`).join("\n")}
 
-Total: ₹${orderDetails.finalTotal}
+Total: ₹${totals.finalTotal}
 
 Payment: ${orderDetails.paymentMethod}
 Payment Status: ${orderDetails.paymentStatus}

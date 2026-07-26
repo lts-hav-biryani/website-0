@@ -1,0 +1,12 @@
+const express = require("express");
+const { loginController, registerController, changePasswordController, logoutController, loggedInController } = require("../Controller/auth.controller");
+const { authMiddleware } = require("../Middlewares/auth.middleware");
+const { dashboardController } = require("../Controller/dashboard.controller");
+const routes = express.Router();
+routes.post("/logout", logoutController);
+routes.post("/changePassword", authMiddleware, changePasswordController);
+routes.post("/login", loginController);
+routes.post("/register", registerController);
+routes.post("/dashboard", authMiddleware, dashboardController);
+routes.get("/loggedIn", authMiddleware, loggedInController);
+module.exports = routes;

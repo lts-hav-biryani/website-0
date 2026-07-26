@@ -1,5 +1,5 @@
 const express = require("express");
-const { razorpayCreateOrderController, verifyPaymentController, webhookController } = require("../Controller/admin/order.controller");
+const { razorpayCreateOrderController, verifyPaymentController, webhookController } = require("../Controller/order.controller");
 const routes = express.Router();
 routes.post("/razorpayCreateOrder", razorpayCreateOrderController)
 routes.post("/verifyPayment", verifyPaymentController);
