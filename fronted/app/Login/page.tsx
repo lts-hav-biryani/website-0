@@ -15,7 +15,7 @@ const Login = () => {
   const router = useRouter();
   const loginAuth = async () => {
     console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
-    const response = await fetch(`http://localhost:8010/api/login`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
       method: "POST",
       credentials: "include",
       headers: {
