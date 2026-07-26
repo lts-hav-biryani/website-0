@@ -136,7 +136,7 @@ const CartPage = () => {
       }
       if (response.ok) {
         // console.log(window.Razorpay)
-        const rzp = new window.Razorpay(options);
+        const rzp = new (window as any).Razorpay(options);
         rzp.open()
       }
       setIsProcessing(false)
