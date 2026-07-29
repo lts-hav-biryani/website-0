@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const paymentRoutes = require("./Routes/paymentRoutes");
 const authRoutes = require("./Routes/authRoutes");
 const { authMiddleware } = require("./Middlewares/auth.middleware");
-const AppError = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AppError");
+const AppError = require("./Utils/AppError");
 dotenv.config();
 app.use(express.json());
 app.use(cors({
