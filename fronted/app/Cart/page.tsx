@@ -493,7 +493,6 @@ const CartPage = () => {
         strategy="afterInteractive"
         onLoad={() => {
           console.log("Razorpay SDK loaded");
-          console.log(window.Razorpay);
         }}
       />
     </div>
