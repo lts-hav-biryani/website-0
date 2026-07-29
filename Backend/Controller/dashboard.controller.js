@@ -1,7 +1,7 @@
-const { userInfo, userAddresses } = require("/Projects/LetsHavBiriyani-website/Backend/Models/user");
-const AppError = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AppError");
+const { userInfo } = require("../Models/user");
+const AppError = require("../Utils/AppError");
 const bcrypt = require("bcrypt");
-const asyncHandler = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AsyncHanlder");
+const asyncHandler = require("../Utils/AsyncHanlder");
 const passwordChangeController = asyncHandler(async (req, res) => {
     const userId = req.user;
     const { oldPassword, newPassword } = req.body;

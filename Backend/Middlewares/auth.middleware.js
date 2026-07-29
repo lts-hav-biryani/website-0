@@ -2,8 +2,8 @@ const express = require("express");
 const { verifyToken } = require("../Utils/jwt");
 const { userInfo } = require("../Models/user");
 const bcrypt = require("bcrypt");
-const asyncHandler = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AsyncHanlder");
-const AppError = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AppError");
+const asyncHandler = require("../Utils/AsyncHanlder");
+const AppError = require("../Utils/AppError");
 const authMiddleware = asyncHandler(async (req, res, next) => {
     const token = req.cookies.token;
     console.log("Control reached middleware");

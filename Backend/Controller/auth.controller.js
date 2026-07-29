@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
-const { userInfo } = require("/Projects/LetsHavBiriyani-website/Backend/Models/user");
+const { userInfo } = require("../Models/user");
 const { loginService } = require("../Services/auth.services");
-const asyncHandler = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AsyncHanlder")
-const AppError = require("/Projects/LetsHavBiriyani-website/Backend/Utils/AppError");
+const asyncHandler = require("../Utils/AsyncHanlder")
+const AppError = require("../Utils/AppError");
 const { assignToken } = require("../Utils/jwt");
 const loginController = async (req, res) => {
     const { email, password } = req.body;

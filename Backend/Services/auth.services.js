@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { userInfo } = require("/Projects/LetsHavBiriyani-website/Backend/Models/user")
+const { userInfo } = require("../Models/user")
 async function loginService(myObj) {
     const { email, password } = myObj;
     const response = {};
