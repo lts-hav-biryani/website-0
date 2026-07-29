@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { LuLogOut } from "react-icons/lu";
 import { useCart } from "../context/GlobalContext";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
     const { setLoggedIn } = useCart();

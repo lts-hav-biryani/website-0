@@ -57,9 +57,7 @@ Payment Status: ${orderDetails.paymentStatus}
 ${orderDetails.paymentId ? `Payment ID: ${orderDetails.paymentId}` : ""}
 
 Address:
-${orderDetails.address.name}
-${orderDetails.address.phone}
-${orderDetails.address.street}, ${orderDetails.address.city} - ${orderDetails.address.pincode}
+${orderDetails.address}
   `);
 
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
@@ -88,7 +86,7 @@ ${orderDetails.address.street}, ${orderDetails.address.city} - ${orderDetails.ad
         ) : (
           <>
             <h1 className="text-2xl md:text-3xl font-bold">Order Details</h1>
-            <p className="text-[#9CA3AF] mt-2">Order ID: {order.id}</p>
+            <p className="text-[#9CA3AF] mt-2">Order ID: {orderDetails.id}</p>
           </>
         )}
       </div>
@@ -104,7 +102,7 @@ ${orderDetails.address.street}, ${orderDetails.address.city} - ${orderDetails.ad
             </div>
 
             <div className="flex flex-col gap-3">
-              {orderDetails.items.map((item) => (
+              {orderDetails.items!.map((item) => (
                 <div
                   key={item.itemId}
                   className="flex justify-between text-sm gap-4"
@@ -126,7 +124,7 @@ ${orderDetails.address.street}, ${orderDetails.address.city} - ${orderDetails.ad
               <span className="text-white">₹ {orderDetails.subtotal}</span>
             </div>
 
-            {orderDetails.discount > 0 && (
+            {orderDetails.discount! > 0 && (
               <div className="flex justify-between text-sm text-[#22C55E] mt-1">
                 <span>Discount</span>
                 <span>− ₹ {orderDetails.discount}</span>
@@ -136,29 +134,29 @@ ${orderDetails.address.street}, ${orderDetails.address.city} - ${orderDetails.ad
             <div className="flex justify-between text-sm text-[#9CA3AF] mt-1">
               <span>Delivery</span>
               <span className="text-white">
-                {orderDetails.delivery === 0 ? "Free" : `₹ ${orderDetails.delivery}`}
+                {orderDetails.delivery === 0 ? "Free" : `₹ ${orderDetails.delivery!}`}
               </span>
             </div>
 
             <div className="flex justify-between text-sm text-[#9CA3AF] mt-1">
               <span>Tax</span>
-              <span className="text-white">₹ {orderDetails.tax}</span>
+              <span className="text-white"> {orderDetails.tax!}</span>
             </div>
 
             <div className="flex justify-between text-base font-semibold mt-3">
               <span>Total</span>
-              <span className="text-[#F4B400]">₹ {orderDetails.finalTotal}</span>
+              <span className="text-[#F4B400]">₹ {orderDetails.finalTotal!}</span>
             </div>
           </div>
 
           <div className="bg-[#112A3C] border border-[#2C4A5F] rounded-2xl p-5">
             <h2 className="text-lg font-semibold mb-4">Delivery Address</h2>
             <div className="text-sm text-[#9CA3AF]">
-              <p className="text-white font-medium">{orderDetails.address.name}</p>
-              <p>{orderDetails.address.phone}</p>
-              <p>{orderDetails.address.street}</p>
+              <p className="text-white font-medium">{orderDetails.address!.name!}</p>
+              <p>{orderDetails.address!.phone!}</p>
+              <p>{orderDetails.address!.street!}</p>
               <p>
-                {orderDetails.address.city} - {orderDetails.address.pincode}
+                {orderDetails.address!.city!} - {orderDetails.address!.pincode!}
               </p>
             </div>
           </div>
@@ -167,7 +165,7 @@ ${orderDetails.address.street}, ${orderDetails.address.city} - ${orderDetails.ad
             <h2 className="text-lg font-semibold mb-4">Payment Details</h2>
             <div className="flex justify-between text-sm">
               <span className="text-[#9CA3AF]">Method</span>
-              <span className="text-white">{orderDetails.paymentMethod}</span>
+              <span className="text-white">{orderDetails.paymentMethod!}</span>
             </div>
             <div className="flex justify-between text-sm mt-2">
               <span className="text-[#9CA3AF]">Status</span>
