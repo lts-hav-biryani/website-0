@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -41,7 +40,21 @@ const OrderSuccessPage = () => {
       </div>
     );
   }
-  console.log(orderDetails)
+    if (!orderDetails.items) {
+    return (
+      <div className="min-h-screen bg-[#0B1F2E] text-white flex flex-col items-center justify-center px-4 text-center">
+        <p className="text-[#9CA3AF] mb-4">No order details found.</p>
+        <button
+          onClick={() => router.push("/Menu")}
+          className="bg-[#F4B400] text-[#0B1F2E] px-6 py-2 rounded-lg font-semibold"
+        >
+          Back to Menu
+        </button>
+      </div>
+    );
+  }
+  
+  console.log(orderDetails);
   const whatsappMessage = encodeURIComponent(`
 Order Help Request
 

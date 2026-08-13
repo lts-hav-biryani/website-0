@@ -9,6 +9,9 @@ const Dashboard = () => {
     const router = useRouter()
     const [access, setAccess] = useState(false);
     const [message, setMessage] = useState("");
+    const [showOrder, setShowOrders] = useState(false)
+    const [orderMessage, setOrderMessage] = useState("");
+    let orderObj: Array<Object>;
     useEffect(() => {
         const verifyCred = async () => {
             const user = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/dashboard`, {
@@ -25,8 +28,28 @@ const Dashboard = () => {
             setMessage(response.message);
         }
         verifyCred();
+        fetchOrders();
     }, [])
-    const [tab, setTab] = useState("orders");
+    const fetchOrders = async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/fetchOrders`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            credentials: "include"
+        });
+        const data = await response.json();
+        setOrderMessage(data.message);
+        if (response.ok) {
+            orderObj = data.orders;
+            if (orderObj.length > 0) {
+                setShowOrders(true);
+                console.log(orderMessage)
+            }
+            console.log(orderObj);
+        }
+    };
+    const [tab, setTab] = useState("Orders");
     const handleLogout = async () => {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/logout`, {
@@ -47,7 +70,7 @@ const Dashboard = () => {
             setLoggedIn(false);
             console.log(error);
         }
-    }
+    };
     return (
         <div>
             {access && <div className="min-h-screen bg-[#0B1F2E] text-white flex">
@@ -57,10 +80,12 @@ const Dashboard = () => {
 
                     <h2 className="text-lg font-semibold mb-4">My Account</h2>
 
-                    {["orders", "profile", "address", "help", "logout"].map((item) => (
+                    {["Orders", "Profile", "Address", "Help", "Logout"].map((item) => (
                         <button
                             key={item}
-                            onClick={() => setTab(item)}
+                            onClick={() => {
+                                setTab(item);
+                            }}
                             className={`text-left px-3 py-2 rounded-lg ${tab === item
                                 ? "bg-[#F4B400] text-black"
                                 : "text-[#9CA3AF] hover:bg-[#1E3A4C]"
@@ -79,7 +104,7 @@ const Dashboard = () => {
                     {/* MOBILE TABS */}
                     <div className="md:hidden flex gap-2 overflow-x-auto pb-2">
 
-                        {["orders", "profile", "address", "help", "logout"].map((item) => (
+                        {["Orders", "Profile", "Address", "Help", "Logout"].map((item) => (
                             <button
                                 key={item}
                                 onClick={() => setTab(item)}
@@ -95,17 +120,33 @@ const Dashboard = () => {
                     </div>
 
                     {/* ORDERS */}
-                    {tab === "orders" && (
-                        <div className="flex flex-col gap-3">
-                            <div className="bg-[#1E3A4C] p-4 rounded-xl border border-[#2C4A5F]">
-                                <p>Chicken Biryani x2</p>
-                                <span className="text-sm text-[#9CA3AF]">Delivered</span>
-                            </div>
-                        </div>
-                    )}
+                    {tab === "Orders" && showOrder &&
 
+                        orderObj!.forEach((e: any) => {
+                            <div className="flex flex-col gap-3">
+                                <div className="bg-[#1E3A4C] p-4 rounded-xl border border-[#2C4A5F]">
+                                    <p>Order Id : {e.orderId}</p>
+                                    <p>Item Details : </p>
+                                    <table>
+                                        {e.itemDetails.forEach((item: any) => {
+                                            return (
+                                                <tr key={item.itemId}  >
+                                                    <th>{item.itemName}</th>
+                                                    <th>{item.itemQuantity}</th>
+                                                    <th>{item.itemPrice}</th>
+                                                </tr>
+                                            )
+                                        })}
+                                    </table>
+                                    <p>Final Total : {e.finalTotal}</p>
+                                    {e.orderConfirmed && <span className="text-sm text-[#9CA3AF]">Order Confirmed</span>}
+                                    {e.orderDelivered && <span className="text-sm text-[#9CA3AF]">Delivered</span>}
+                                </div>
+                            </div>
+                        })
+                    }
                     {/* PROFILE */}
-                    {tab === "profile" && (
+                    {tab === "Profile" && (
                         <div className="flex flex-col gap-3 max-w-md">
                             <input className="bg-[#1E3A4C] p-3 rounded-xl" placeholder="Name" />
                             <input className="bg-[#1E3A4C] p-3 rounded-xl" placeholder="Email" />
@@ -116,7 +157,7 @@ const Dashboard = () => {
                     )}
 
                     {/* ADDRESS */}
-                    {tab === "address" && (
+                    {tab === "Address" && (
                         <div className="flex flex-col gap-3">
                             <div className="bg-[#1E3A4C] p-4 rounded-xl">
                                 <p>Home - Bangalore</p>
@@ -128,7 +169,7 @@ const Dashboard = () => {
                     )}
 
                     {/* HELP */}
-                    {tab === "help" && (
+                    {tab === "Help" && (
                         <div className="flex flex-col gap-3">
                             <textarea
                                 className="bg-[#1E3A4C] p-3 rounded-xl"
@@ -139,7 +180,7 @@ const Dashboard = () => {
                             </button>
                         </div>
                     )}
-                    {tab === "logout" && (
+                    {tab === "Logout" && (
                         <div className="flex flex-col gap-3 max-w-md">
                             <button className="bg-[#F4B400] text-black py-2 rounded-xl " onClick={handleLogout}>
                                 Logout

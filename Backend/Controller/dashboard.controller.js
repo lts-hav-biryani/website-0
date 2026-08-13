@@ -24,4 +24,5 @@ const dashboardController = asyncHandler(async (req, res) => {
         userDetails: { name: decoded.name, email: decoded.email }
     });
 });
+
 module.exports = { passwordChangeController, dashboardController }

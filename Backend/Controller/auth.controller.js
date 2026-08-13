@@ -40,7 +40,12 @@ const registerController = asyncHandler(async (req, res) => {
     // if (typeof name !== "string" || typeof email !== "string" || typeof password !== "string" || typeof phone !== "string" || phone == undefined || email == undefined || name == undefined || password == undefined) {
     //     throw new AppError(400, "Invalid Entry");
     // };
-    const isUser = await userInfo.findOne({ email: email });
+    const isUser = await userInfo.findOne({
+        $or: [
+            { email: emailId },
+            { phoneNumber: phone }
+        ]
+    });
     if (isUser) {
         throw new AppError(400, "User already exists!")
     }
@@ -76,12 +81,16 @@ const changePasswordController = asyncHandler(async (req, res) => {
         status: true
     })
 });
+
+
 /**
  * @param {import("express").Request} req
  * @param {import("express").Response} res
  */
+
+
 const logoutController = async (req, res) => {
-    res.status(200).clearCookie(token, { sameSite: true, httpOnly: true, secure: true }).json({
+    res.status(200).clearCookie("token", { sameSite: true, httpOnly: true, secure: true }).json({
         message: "Logout successful!",
         status: true
     });

@@ -1,8 +1,10 @@
+"use client"
 import Image from 'next/image'
+import { useRouter } from 'next/navigation';
 
 const Footer = () => {
   const year = new Date().getFullYear();
-
+  const router = useRouter();
   return (
     <footer className="bg-[#0B1F2E] border-t border-[#2C4A5F] mt-10">
 
@@ -25,17 +27,17 @@ const Footer = () => {
         {/* COMPANY */}
         <div className="flex flex-col gap-2">
           <h3 className="text-white font-semibold mb-2">Company</h3>
-          <button className="text-[#9CA3AF] hover:text-white transition text-left">About</button>
-          <button className="text-[#9CA3AF] hover:text-white transition text-left">Careers</button>
-          <button className="text-[#9CA3AF] hover:text-white transition text-left">Contact</button>
+          <button className="text-[#9CA3AF] hover:text-white transition text-left" onClick={()=>router.push("/About")} >About</button>
+          <button className="text-[#9CA3AF] hover:text-white transition text-left"  onClick={()=>router.push("/Careers")}>Careers</button>
+          <button className="text-[#9CA3AF] hover:text-white transition text-left" onClick={()=>router.push("/Contact")}  >Contact</button>
         </div>
 
         {/* LEGAL */}
         <div className="flex flex-col gap-2">
           <h3 className="text-white font-semibold mb-2">Legal</h3>
-          <button className="text-[#9CA3AF] hover:text-white transition text-left">Privacy Policy</button>
-          <button className="text-[#9CA3AF] hover:text-white transition text-left">Terms</button>
-          <button className="text-[#9CA3AF] hover:text-white transition text-left">Refund Policy</button>
+          <button className="text-[#9CA3AF] hover:text-white transition text-left" onClick={() => router.push("/PrivacyPolicy")} >Privacy Policy</button>
+          <button className="text-[#9CA3AF] hover:text-white transition text-left" onClick={() => router.push("/Terms")} >Terms</button>
+          <button className="text-[#9CA3AF] hover:text-white transition text-left" onClick={() => router.push("/RefundPolicy")} >Refund Policy</button>
         </div>
 
         {/* SOCIAL */}
@@ -43,24 +45,24 @@ const Footer = () => {
           <h3 className="text-white font-semibold">Follow Us</h3>
 
           <div className="flex gap-3">
-            {[1,2,3].map((i) => (
+            {[1].map((i) => (
               <button
                 key={i}
                 className="bg-[#1E3A4C] p-2 rounded-lg hover:bg-[#F4B400] transition"
               >
-                <Image src="/Instagram.svg" width={20} height={20} alt="social" />
+                <a href="https://www.instagram.com/lets_have_biryani">
+                  <Image src="/Instagram.svg" width={20} height={20} alt="social" />
+                </a>
               </button>
             ))}
           </div>
         </div>
 
       </div>
-
       {/* BOTTOM */}
       <div className="text-center text-xs text-[#9CA3AF] pb-6">
         © {year} LtsHavBiryani. All rights reserved.
       </div>
-
     </footer>
   )
 }

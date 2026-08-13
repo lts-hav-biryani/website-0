@@ -11,7 +11,7 @@ const AppError = require("./Utils/AppError");
 dotenv.config();
 app.use(express.json());
 app.use(cors({
-    origin: [process.env.FRONTEND || 'http://10.52.207.246'],
+    origin: [process.env.FRONTEND],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST"]
