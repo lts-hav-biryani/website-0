@@ -19,7 +19,11 @@ const loginController = async (req, res) => {
             )
         }
         const token = await assignToken({ email: email });
-        return res.status(200).cookie("token", token).json(
+        return res.status(200).cookie("token", token, {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: true
+        }).json(
             response
         )
     } catch (error) {
