@@ -1,17 +1,17 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import { LuLogOut } from "react-icons/lu";
 import { useCart } from "../context/GlobalContext";
 import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
     const { setLoggedIn } = useCart();
     const router = useRouter()
-    const [access, setAccess] = useState(false);
+    const [access, setAccess] = useState<boolean>(false);
     const [message, setMessage] = useState("");
-    const [showOrder, setShowOrders] = useState(false)
+    const [showOrder, setShowOrders] = useState<boolean>(false)
     const [orderMessage, setOrderMessage] = useState("");
-    let orderObj: Array<Object>;
+    // let orderObj: Array<Object>;
+    const [orderObj, setOrderObj] = useState<any[]>([]);
     useEffect(() => {
         const verifyCred = async () => {
             const user = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/dashboard`, {
@@ -41,7 +41,7 @@ const Dashboard = () => {
         const data = await response.json();
         setOrderMessage(data.message);
         if (response.ok) {
-            orderObj = data.orders;
+            setOrderObj(data.orders);
             if (orderObj.length > 0) {
                 setShowOrders(true);
                 console.log(orderMessage)
@@ -98,52 +98,56 @@ const Dashboard = () => {
 
                 {/* CONTENT */}
                 <div className="flex-1 p-5 flex flex-col gap-5">
-
                     {/* HEADER */}
                     <h1 className="text-2xl font-bold capitalize">{tab}</h1>
-                    {/* MOBILE TABS */}
+                    {/*Mobile Tabs*/}
                     <div className="md:hidden flex gap-2 overflow-x-auto pb-2">
-
-                        {["Orders", "Profile", "Address", "Help", "Logout"].map((item) => (
-                            <button
-                                key={item}
-                                onClick={() => setTab(item)}
-                                className={`px-4 py-2 rounded-lg whitespace-nowrap text-sm ${tab === item
-                                    ? "bg-[#F4B400] text-black"
-                                    : "bg-[#1E3A4C] text-[#9CA3AF]"
-                                    }`}
-                            >
-                                {item}
-                            </button>
-                        ))}
-
+                        {["Orders", "Profile", "Address", "Help", "Logout"].map((item) => {
+                            return (
+                                <button
+                                    key={item}
+                                    onClick={() => setTab(item)}
+                                    className={`px-4 py-2 rounded-lg whitespace-nowrap text-sm ${tab === item ? "bg-[#F4B400] text-black" : "bg-[#1E3A4C] text-[#9CA3AF]"}`}>{item}</button>
+                            )
+                        })}
                     </div>
-
                     {/* ORDERS */}
                     {tab === "Orders" && showOrder &&
-
-                        orderObj!.forEach((e: any) => {
-                            <div className="flex flex-col gap-3">
+                        orderObj.map((e: any) => (
+                            <div key={e.orderId} className="flex flex-col gap-3">
                                 <div className="bg-[#1E3A4C] p-4 rounded-xl border border-[#2C4A5F]">
                                     <p>Order Id : {e.orderId}</p>
-                                    <p>Item Details : </p>
+
+                                    <p>Item Details :</p>
+
                                     <table>
-                                        {e.itemDetails.forEach((item: any) => {
-                                            return (
-                                                <tr key={item.itemId}  >
+                                        <tbody>
+                                            {e.itemDetails.map((item: any) => (
+                                                <tr key={item.itemId}>
                                                     <th>{item.itemName}</th>
                                                     <th>{item.itemQuantity}</th>
                                                     <th>{item.itemPrice}</th>
                                                 </tr>
-                                            )
-                                        })}
+                                            ))}
+                                        </tbody>
                                     </table>
+
                                     <p>Final Total : {e.finalTotal}</p>
-                                    {e.orderConfirmed && <span className="text-sm text-[#9CA3AF]">Order Confirmed</span>}
-                                    {e.orderDelivered && <span className="text-sm text-[#9CA3AF]">Delivered</span>}
+
+                                    {e.orderConfirmed && (
+                                        <span className="text-sm text-[#9CA3AF]">
+                                            Order Confirmed
+                                        </span>
+                                    )}
+
+                                    {e.orderDelivered && (
+                                        <span className="text-sm text-[#9CA3AF]">
+                                            Delivered
+                                        </span>
+                                    )}
                                 </div>
                             </div>
-                        })
+                        ))
                     }
                     {/* PROFILE */}
                     {tab === "Profile" && (
