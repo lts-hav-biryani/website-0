@@ -50,6 +50,7 @@ const verifyPaymentController = async (req, res) => {
                     `🍽️ ${index + 1}. ${item.itemId}\n   🔢 Quantity: ${item.itemQuantity}\n   💰 Price: ₹${item.itemPrice}`
             )
             .join("\n\n");
+
         const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
         const response = await fetch(url, {
             method: "POST",

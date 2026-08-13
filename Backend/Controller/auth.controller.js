@@ -7,8 +7,6 @@ const { assignToken } = require("../Utils/jwt");
 const loginController = async (req, res) => {
     const { email, password } = req.body;
     try {
-        // if (typeof email !== "string") { throw new Error("Invalid Datatype") }
-        // if (typeof password !== "string") { throw new Error("Invalid Datatype") }
         const myObj = {};
         myObj.email = email;
         myObj.password = password;
@@ -30,10 +28,6 @@ const loginController = async (req, res) => {
         )
     } catch (error) {
         throw new AppError(401, error.message)
-        // return res.status(401).json({
-        //     message: error.message,
-        //     status: false
-        // })
     }
 };
 const registerController = asyncHandler(async (req, res) => {
@@ -87,14 +81,10 @@ const changePasswordController = asyncHandler(async (req, res) => {
         status: true
     })
 });
-
-
 /**
  * @param {import("express").Request} req
  * @param {import("express").Response} res
  */
-
-
 const logoutController = async (req, res) => {
     res.status(200).clearCookie("token", { sameSite: true, httpOnly: true, secure: true }).json({
         message: "Logout successful!",
