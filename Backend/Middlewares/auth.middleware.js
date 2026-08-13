@@ -9,6 +9,8 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
     console.log("Control reached middleware");
     try {
         if (!token) {
+            console.log(req.cookies);
+            console.log(req.cookies.token);
             throw new AppError(400, "Invalid token or expired token");
         }
         const decoded = await verifyToken(token);
