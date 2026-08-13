@@ -21,7 +21,7 @@ const loginController = async (req, res) => {
         const token = await assignToken({ email: email });
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: "lax",
+            sameSite: "none",
             secure: true
         });
         res.status(200).json(
