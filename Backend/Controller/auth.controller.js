@@ -22,7 +22,8 @@ const loginController = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             sameSite: "none",
-            secure: true
+            secure: true,
+            path: "/" // Anyways the default path is set to / itself
         });
         res.status(200).json(
             response
